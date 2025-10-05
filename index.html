@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Nikki clothing list! </title>
+</head>
+<style>
+body {
+	background-image: url('stars.png');
+}
+</style>
+<body>
+<h1>The Nikki Clothing list!</h1>
+<p>Welcome to the love nikki, shining nikki and Infinity nikki (or any other app) List maker</p>
+<p>This app is for listing the names of the clothes or items you've collected in game! and that you like!</p>
+<p>Here you input the clothing!</p>
+<p>Once your done you can export the file and it will be in .nct so you can import it back in</p>
+<p>you can also clear everything</p>
+<p>I made this app so you can keep track of you favorit items in you games! i hope you like it!</p>
+<p>With <3 from Ace</p>
+    <input type="text" id="itemInput" placeholder="Enter item">
+    <button onclick="addItem()">Add Item</button>
+    <button onclick="exportList()">Export List</button>
+    <button onclick="clearList()">Clear List</button>
+    <input type="file" id="fileInput" accept=".nct" onchange="importList(event)">
+    <ul id="itemList"></ul>
+ <script>
+     function addItem() {
+            const input = document.getElementById('itemInput');
+            const itemList = document.getElementById('itemList');
+            if (input.value) {
+                const li = document.createElement('li');
+                li.textContent = input.value;
+                itemList.appendChild(li);
+                input.value = '';
+            }
+        }
+        function clearList() {
+            const itemList = document.getElementById('itemList');
+            itemList.innerHTML = '';
+        }
+
+        function exportList() {
+            const itemList = document.getElementById('itemList');
+            const items = Array.from(itemList.children).map(li => li.textContent);
+            const blob = new Blob([JSON.stringify(items)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'list.nct';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importList(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const items = JSON.parse(e.target.result);
+                const itemList = document.getElementById('itemList');
+                itemList.innerHTML = '';
+                items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    itemList.appendChild(li);
+                });
+            };
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>
